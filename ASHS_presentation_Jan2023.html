@@ -1593,13 +1593,13 @@ mean of x
 <li>We specify “greater” in the <code>altnerative</code> argument to test the hypothesis that crossed plants are taller</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb61" data-code-line-numbers="1-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="co"># Create a box plot showing t-test results</span></span>
+<div class="sourceCode cell-code" id="cb61" data-code-line-numbers="1-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="co"># Create a box plot showing t-test results</span></span>
 <span id="cb61-2"><a href="#cb61-2"></a>plot_corn <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(dat_corn, <span class="fu">aes</span>(<span class="at">x =</span> type, <span class="at">y =</span> height, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
 <span id="cb61-3"><a href="#cb61-3"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="co"># box plot</span></span>
 <span id="cb61-4"><a href="#cb61-4"></a>  ggsignif<span class="sc">::</span><span class="fu">geom_signif</span>(<span class="at">comparisons =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"cross"</span>, <span class="st">"self"</span>)), </span>
 <span id="cb61-5"><a href="#cb61-5"></a>            <span class="at">map_signif_level =</span> <span class="cn">TRUE</span>, <span class="co"># add significance values</span></span>
 <span id="cb61-6"><a href="#cb61-6"></a>            <span class="at">alternative =</span> <span class="st">"greater"</span>,  <span class="co">#H: Crossed plants higher</span></span>
-<span id="cb61-7"><a href="#cb61-7"></a>            <span class="at">textsize =</span> <span class="dv">12</span>) <span class="sc">+</span> <span class="co"># Asterisk size</span></span>
+<span id="cb61-7"><a href="#cb61-7"></a>            <span class="at">textsize =</span> ) <span class="sc">+</span> <span class="co"># Asterisk size</span></span>
 <span id="cb61-8"><a href="#cb61-8"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb61-9"><a href="#cb61-9"></a>  <span class="fu">xlab</span>(<span class="st">"Type of fertilization"</span>) <span class="sc">+</span> <span class="co"># x-axis label</span></span>
 <span id="cb61-10"><a href="#cb61-10"></a>  <span class="fu">ylab</span>(<span class="st">"Height"</span>) <span class="sc">+</span> <span class="co"># y-axis label</span></span>
@@ -1622,7 +1622,7 @@ mean of x
 <span id="cb62-4"><a href="#cb62-4"></a>  ggsignif<span class="sc">::</span><span class="fu">geom_signif</span>(<span class="at">comparisons =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"cross"</span>, <span class="st">"self"</span>)), </span>
 <span id="cb62-5"><a href="#cb62-5"></a>            <span class="at">map_signif_level =</span> <span class="cn">TRUE</span>, <span class="co"># add significance values</span></span>
 <span id="cb62-6"><a href="#cb62-6"></a>            <span class="at">alternative =</span> <span class="st">"greater"</span>,  <span class="co">#H: Crossed plants higher</span></span>
-<span id="cb62-7"><a href="#cb62-7"></a>            <span class="at">textsize =</span> <span class="dv">6</span>) <span class="sc">+</span> <span class="co"># Asterisk size</span></span>
+<span id="cb62-7"><a href="#cb62-7"></a>            <span class="at">textsize =</span> <span class="dv">7</span>) <span class="sc">+</span> <span class="co"># Asterisk size</span></span>
 <span id="cb62-8"><a href="#cb62-8"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb62-9"><a href="#cb62-9"></a>  <span class="fu">xlab</span>(<span class="st">"Type of fertilization"</span>) <span class="sc">+</span> <span class="co"># x-axis label</span></span>
 <span id="cb62-10"><a href="#cb62-10"></a>  <span class="fu">ylab</span>(<span class="st">"Height"</span>) <span class="sc">+</span> <span class="co"># y-axis label</span></span>

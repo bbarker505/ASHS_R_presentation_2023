@@ -1005,14 +1005,14 @@ t.test(dat_corn2$diff, mu = 0)
 - `ggsignif()` can show whether groups are significantly different  
 - We specify "greater" in the `altnerative` argument to test the hypothesis that crossed plants are taller
 
-```{r, `code-line-numbers`="1-6"}
+```{r, `code-line-numbers`="1-7"}
 # Create a box plot showing t-test results
 plot_corn <- ggplot(dat_corn, aes(x = type, y = height, fill = type)) +
   geom_boxplot() + # box plot
   ggsignif::geom_signif(comparisons = list(c("cross", "self")), 
             map_signif_level = TRUE, # add significance values
             alternative = "greater",  #H: Crossed plants higher
-            textsize = 6) + # Asterisk size
+            textsize = ) + # Asterisk size
   theme_bw() +
   xlab("Type of fertilization") + # x-axis label
   ylab("Height") + # y-axis label
@@ -1038,7 +1038,7 @@ plot_corn <- ggplot(dat_corn, aes(x = type, y = height, fill = type)) +
   ggsignif::geom_signif(comparisons = list(c("cross", "self")), 
             map_signif_level = TRUE, # add significance values
             alternative = "greater",  #H: Crossed plants higher
-            textsize = 6) + # Asterisk size
+            textsize = 7) + # Asterisk size
   theme_bw() +
   xlab("Type of fertilization") + # x-axis label
   ylab("Height") + # y-axis label
