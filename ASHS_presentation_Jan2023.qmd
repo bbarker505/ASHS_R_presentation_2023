@@ -81,7 +81,7 @@ knitr::include_graphics(here("images", "twitter_purrr.png"))
 
 ## Presentation outline
 
-- Introduction to R and Rstudio  
+- Introduction to R and RStudio  
 - Introduction to the Tidyverse
 - Examples: data visualization and analysis    
   1) Environmental influences on yield (Barley) 
@@ -111,7 +111,7 @@ knitr::include_graphics(here("images", "0Advantages-of-R-Programming.jpg"))
 
 ## Limitations of R
 
-- Steep learning curve, but `Rstudio` can help overcome this limitation  
+- Steep learning curve, but `RStudio` can help overcome this limitation  
 - Hungry for physical memory: stores all data in physical memory  
 - Slower execution: may not be as fast as MATLAB and Python  
 
@@ -138,7 +138,7 @@ knitr::include_graphics(here("images", "bang-head-rough-week.gif"))
   - simultaneously view graphs, data tables, code, and outputs  
 
 ```{r, echo = FALSE}
-knitr::include_graphics(here("images", "R_Rstudio.png"))
+knitr::include_graphics(here("images", "R_RStudio.png"))
 ```
 
 ## Analogy of difference between R and RStudio
@@ -164,7 +164,7 @@ knitr::include_graphics(here("images", "RStudio_IDE_screenshot.png"))
 - Data analysis pipeline to clean, process, model, and visualize data  
 - Write simpler, more readable code    
 
-```{r, echo = FALSE, out.width = "1000px", fig.align="left", fig.cap = "Source: education.rstudio.com"}
+```{r, echo = FALSE, out.width = "1000px", fig.align="left", fig.cap = "Source: education.RStudio.com"}
 knitr::include_graphics(here("images", "tidyverse_packages_purpose.png"))
 ```
 
@@ -467,7 +467,7 @@ plot_yield <- plot_yield +
         axis.title = element_text(size = 18))
 ```
 
-- Force the y-axis to start 0
+- Force the y-axis to start at 0
 
 ## Add layers to improve the bar plot
 
@@ -532,7 +532,7 @@ plot_yield
 
 - Question 2: How does the environment influence yield?
 - Access environmental (weather) dataset from `agridat`
-- Sort by `site` column using `arrange()`
+- Sort by the `site` column using `arrange()`
 
 ```{r}
 # Get weather data and sort by site
@@ -571,7 +571,7 @@ mean_yield_sitesYrs <- dat_bar %>%
   summarize(mean_yield = mean(yield))
 ```
 
-- Group yield data by site using (`group_by`) 
+- Group yield data by site using `group_by()`
 - Calculate mean yield using `summarize()`
 
 ## Step 1: mean yield across sites and years
@@ -663,7 +663,7 @@ all_data_sitesYrs <- mean_yield_sitesYrs %>%
 ```
 
 - Join summarized yield and environment datasets `left_join()` 
-- Change to structure to long format using `pivot_longer()`  
+- Re-format data to "long" format using `pivot_longer()`  
 
 ## Step 3: Join and reformat results
 
@@ -758,7 +758,7 @@ plot_barVwea <- ggplot(data = all_data_sitesYrs, aes(x = value, y = mean_yield, 
 - Create a scatter plot using `geom_point()`
 - Add a linear regression line using `geom_smooth()` with `lm` method
 - Create plots for each site and covariate using `facet_nested_wrap`
-- Make plot prettier by adding more layers (font sizes, etc.)
+- Make plot prettier by adding more layers (custom labels, larger font sizes, etc.)
 
 ## Step 4: Plot yield vs. environmental covariates
 
@@ -770,7 +770,7 @@ plot_barVwea
   
 ## Presentation outline
 
-- Introduction to R and Rstudio 
+- Introduction to R and RStudio 
 - Introduction to the Tidyverse  
 - Examples: data visualization and analysis    
   1) Environmental influences on yield (Barley) 
@@ -940,7 +940,7 @@ plot_resp_alf
 
 ## Presentation outline
 
-- Introduction to R and Rstudio 
+- Introduction to R and RStudio 
 - Introduction to the Tidyverse  
 - Examples: data visualization and analysis    
   1) Environmental influences on yield (Barley) 
@@ -971,7 +971,7 @@ dat_corn2 <- dat_corn %>%
   mutate(diff = cross - self)
 ```
 
-- Re-format data to "wide" format 
+- Re-format data to "wide" format using `pivot_wider()`
 
 ## One sided t-test: maize plant heights
 
@@ -1011,7 +1011,8 @@ plot_corn <- ggplot(dat_corn, aes(x = type, y = height, fill = type)) +
   geom_boxplot() + # box plot
   ggsignif::geom_signif(comparisons = list(c("cross", "self")), 
             map_signif_level = TRUE, # add significance values
-            alternative = "greater") + # Crossed plants higher
+            alternative = "greater",  #H: Crossed plants higher
+            textsize = 6) + # Asterisk size
   theme_bw() +
   xlab("Type of fertilization") + # x-axis label
   ylab("Height") + # y-axis label
@@ -1030,21 +1031,22 @@ Make plot prettier and voila
 
 ::: {.column width="50%"}
 
-```{r, fig.width = 8, fig.height = 10}
+```{r}
 # Create a box plot showing t-test results
 plot_corn <- ggplot(dat_corn, aes(x = type, y = height, fill = type)) +
   geom_boxplot() + # box plot
   ggsignif::geom_signif(comparisons = list(c("cross", "self")), 
-            map_signif_level = TRUE) + # add significance values
+            map_signif_level = TRUE, # add significance values
+            alternative = "greater",  #H: Crossed plants higher
+            textsize = 6) + # Asterisk size
   theme_bw() +
   xlab("Type of fertilization") + # x-axis label
   ylab("Height") + # y-axis label
   labs(fill = "Type of\nfertilization") + # new legend title
-  theme(axis.text = element_text(size = 20), # Increase font sizes
-        axis.title = element_text(size = 22),
-        legend.text = element_text(size = 20),
-        legend.title = element_text(size = 22))
-
+  theme(axis.text = element_text(size = 16), # Increase font sizes
+        axis.title = element_text(size = 18),
+        legend.text = element_text(size = 16),
+        legend.title = element_text(size = 16))
 ```
 
 :::
@@ -1155,7 +1157,7 @@ knitr::include_graphics(here("images", "ferns.jpg"))
 - Modern R with the tidyverse: <http://modern-rstats.eu>
 - Statistical Inference via Data Science: A ModernDive into R and the tidyverse: <https://moderndive.com/index.html>
 - R for Data Science: <https://r4ds.had.co.nz> 
-- R Manuals::An Introduction to R: <https://rstudio.github.io/r-manuals/ Links to an external site>
+- R Manuals::An Introduction to R: <https://RStudio.github.io/r-manuals>
 
 ## Time series: Mean yield across sites + years
 

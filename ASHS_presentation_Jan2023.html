@@ -444,7 +444,7 @@ Brittany Barker
 <section id="presentation-outline" class="slide level2">
 <h2>Presentation outline</h2>
 <ul>
-<li>Introduction to R and Rstudio<br>
+<li>Introduction to R and RStudio<br>
 </li>
 <li>Introduction to the Tidyverse</li>
 <li>Examples: data visualization and analysis
@@ -475,7 +475,7 @@ Brittany Barker
 <section id="limitations-of-r" class="slide level2">
 <h2>Limitations of R</h2>
 <ul>
-<li>Steep learning curve, but <code>Rstudio</code> can help overcome this limitation<br>
+<li>Steep learning curve, but <code>RStudio</code> can help overcome this limitation<br>
 </li>
 <li>Hungry for physical memory: stores all data in physical memory<br>
 </li>
@@ -533,7 +533,7 @@ Brittany Barker
 <li>Write simpler, more readable code</li>
 </ul>
 
-<img data-src="images/tidyverse_packages_purpose.png" width="1000" class="r-stretch quarto-figure-left"><p class="caption">Source: education.rstudio.com</p></section>
+<img data-src="images/tidyverse_packages_purpose.png" width="1000" class="r-stretch quarto-figure-left"><p class="caption">Source: education.RStudio.com</p></section>
 <section id="essential-packages-dplyr-and-tidyr" class="slide level2">
 <h2>Essential packages: <code>dplyr</code> and <code>tidyr</code></h2>
 <p>As a scientist, you spend a huge amount of time preparing, organizing, formatting, and cleaning data</p>
@@ -895,7 +895,7 @@ Brittany Barker
 <span id="cb25-8"><a href="#cb25-8"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
-<li>Force the y-axis to start 0</li>
+<li>Force the y-axis to start at 0</li>
 </ul>
 </section>
 <section id="add-layers-to-improve-the-bar-plot-1" class="slide level2">
@@ -962,7 +962,7 @@ Brittany Barker
 <ul>
 <li>Question 2: How does the environment influence yield?</li>
 <li>Access environmental (weather) dataset from <code>agridat</code></li>
-<li>Sort by <code>site</code> column using <code>arrange()</code></li>
+<li>Sort by the <code>site</code> column using <code>arrange()</code></li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="co"># Get weather data and sort by site</span></span>
@@ -1014,7 +1014,7 @@ Brittany Barker
 <span id="cb32-4"><a href="#cb32-4"></a>  <span class="fu">summarize</span>(<span class="at">mean_yield =</span> <span class="fu">mean</span>(yield))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
-<li>Group yield data by site using (<code>group_by</code>)</li>
+<li>Group yield data by site using <code>group_by()</code></li>
 <li>Calculate mean yield using <code>summarize()</code></li>
 </ul>
 </section>
@@ -1143,7 +1143,7 @@ Brittany Barker
 </div>
 <ul>
 <li>Join summarized yield and environment datasets <code>left_join()</code></li>
-<li>Change to structure to long format using <code>pivot_longer()</code></li>
+<li>Re-format data to “long” format using <code>pivot_longer()</code></li>
 </ul>
 </section>
 <section id="step-3-join-and-reformat-results-2" class="slide level2">
@@ -1255,7 +1255,7 @@ Brittany Barker
 <li>Create a scatter plot using <code>geom_point()</code></li>
 <li>Add a linear regression line using <code>geom_smooth()</code> with <code>lm</code> method</li>
 <li>Create plots for each site and covariate using <code>facet_nested_wrap</code></li>
-<li>Make plot prettier by adding more layers (font sizes, etc.)</li>
+<li>Make plot prettier by adding more layers (custom labels, larger font sizes, etc.)</li>
 </ul>
 </section>
 <section id="step-4-plot-yield-vs.-environmental-covariates-4" class="slide level2">
@@ -1266,7 +1266,7 @@ Brittany Barker
 <section id="presentation-outline-3" class="slide level2">
 <h2>Presentation outline</h2>
 <ul>
-<li>Introduction to R and Rstudio</li>
+<li>Introduction to R and RStudio</li>
 <li>Introduction to the Tidyverse<br>
 </li>
 <li>Examples: data visualization and analysis
@@ -1503,7 +1503,7 @@ Number of Fisher Scoring iterations: 7</code></pre>
 <section id="presentation-outline-4" class="slide level2">
 <h2>Presentation outline</h2>
 <ul>
-<li>Introduction to R and Rstudio</li>
+<li>Introduction to R and RStudio</li>
 <li>Introduction to the Tidyverse<br>
 </li>
 <li>Examples: data visualization and analysis
@@ -1540,7 +1540,7 @@ Number of Fisher Scoring iterations: 7</code></pre>
 <span id="cb57-8"><a href="#cb57-8"></a>  <span class="fu">mutate</span>(<span class="at">diff =</span> cross <span class="sc">-</span> self)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
-<li>Re-format data to “wide” format</li>
+<li>Re-format data to “wide” format using <code>pivot_wider()</code></li>
 </ul>
 </section>
 <section id="one-sided-t-test-maize-plant-heights-1" class="slide level2">
@@ -1598,15 +1598,16 @@ mean of x
 <span id="cb61-3"><a href="#cb61-3"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="co"># box plot</span></span>
 <span id="cb61-4"><a href="#cb61-4"></a>  ggsignif<span class="sc">::</span><span class="fu">geom_signif</span>(<span class="at">comparisons =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"cross"</span>, <span class="st">"self"</span>)), </span>
 <span id="cb61-5"><a href="#cb61-5"></a>            <span class="at">map_signif_level =</span> <span class="cn">TRUE</span>, <span class="co"># add significance values</span></span>
-<span id="cb61-6"><a href="#cb61-6"></a>            <span class="at">alternative =</span> <span class="st">"greater"</span>) <span class="sc">+</span> <span class="co"># Crossed plants higher</span></span>
-<span id="cb61-7"><a href="#cb61-7"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb61-8"><a href="#cb61-8"></a>  <span class="fu">xlab</span>(<span class="st">"Type of fertilization"</span>) <span class="sc">+</span> <span class="co"># x-axis label</span></span>
-<span id="cb61-9"><a href="#cb61-9"></a>  <span class="fu">ylab</span>(<span class="st">"Height"</span>) <span class="sc">+</span> <span class="co"># y-axis label</span></span>
-<span id="cb61-10"><a href="#cb61-10"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Type of</span><span class="sc">\n</span><span class="st">fertilization"</span>) <span class="sc">+</span> <span class="co"># new legend title</span></span>
-<span id="cb61-11"><a href="#cb61-11"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>), <span class="co"># Increase font sizes</span></span>
-<span id="cb61-12"><a href="#cb61-12"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
-<span id="cb61-13"><a href="#cb61-13"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>),</span>
-<span id="cb61-14"><a href="#cb61-14"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb61-6"><a href="#cb61-6"></a>            <span class="at">alternative =</span> <span class="st">"greater"</span>,  <span class="co">#H: Crossed plants higher</span></span>
+<span id="cb61-7"><a href="#cb61-7"></a>            <span class="at">textsize =</span> <span class="dv">12</span>) <span class="sc">+</span> <span class="co"># Asterisk size</span></span>
+<span id="cb61-8"><a href="#cb61-8"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb61-9"><a href="#cb61-9"></a>  <span class="fu">xlab</span>(<span class="st">"Type of fertilization"</span>) <span class="sc">+</span> <span class="co"># x-axis label</span></span>
+<span id="cb61-10"><a href="#cb61-10"></a>  <span class="fu">ylab</span>(<span class="st">"Height"</span>) <span class="sc">+</span> <span class="co"># y-axis label</span></span>
+<span id="cb61-11"><a href="#cb61-11"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Type of</span><span class="sc">\n</span><span class="st">fertilization"</span>) <span class="sc">+</span> <span class="co"># new legend title</span></span>
+<span id="cb61-12"><a href="#cb61-12"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>), <span class="co"># Increase font sizes</span></span>
+<span id="cb61-13"><a href="#cb61-13"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb61-14"><a href="#cb61-14"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>),</span>
+<span id="cb61-15"><a href="#cb61-15"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="box-plots-and-t-test-maize-plant-heights-1" class="slide level2">
@@ -1619,15 +1620,17 @@ mean of x
 <span id="cb62-2"><a href="#cb62-2"></a>plot_corn <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(dat_corn, <span class="fu">aes</span>(<span class="at">x =</span> type, <span class="at">y =</span> height, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
 <span id="cb62-3"><a href="#cb62-3"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="co"># box plot</span></span>
 <span id="cb62-4"><a href="#cb62-4"></a>  ggsignif<span class="sc">::</span><span class="fu">geom_signif</span>(<span class="at">comparisons =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"cross"</span>, <span class="st">"self"</span>)), </span>
-<span id="cb62-5"><a href="#cb62-5"></a>            <span class="at">map_signif_level =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="co"># add significance values</span></span>
-<span id="cb62-6"><a href="#cb62-6"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb62-7"><a href="#cb62-7"></a>  <span class="fu">xlab</span>(<span class="st">"Type of fertilization"</span>) <span class="sc">+</span> <span class="co"># x-axis label</span></span>
-<span id="cb62-8"><a href="#cb62-8"></a>  <span class="fu">ylab</span>(<span class="st">"Height"</span>) <span class="sc">+</span> <span class="co"># y-axis label</span></span>
-<span id="cb62-9"><a href="#cb62-9"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Type of</span><span class="sc">\n</span><span class="st">fertilization"</span>) <span class="sc">+</span> <span class="co"># new legend title</span></span>
-<span id="cb62-10"><a href="#cb62-10"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>), <span class="co"># Increase font sizes</span></span>
-<span id="cb62-11"><a href="#cb62-11"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">22</span>),</span>
-<span id="cb62-12"><a href="#cb62-12"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>),</span>
-<span id="cb62-13"><a href="#cb62-13"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">22</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb62-5"><a href="#cb62-5"></a>            <span class="at">map_signif_level =</span> <span class="cn">TRUE</span>, <span class="co"># add significance values</span></span>
+<span id="cb62-6"><a href="#cb62-6"></a>            <span class="at">alternative =</span> <span class="st">"greater"</span>,  <span class="co">#H: Crossed plants higher</span></span>
+<span id="cb62-7"><a href="#cb62-7"></a>            <span class="at">textsize =</span> <span class="dv">6</span>) <span class="sc">+</span> <span class="co"># Asterisk size</span></span>
+<span id="cb62-8"><a href="#cb62-8"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb62-9"><a href="#cb62-9"></a>  <span class="fu">xlab</span>(<span class="st">"Type of fertilization"</span>) <span class="sc">+</span> <span class="co"># x-axis label</span></span>
+<span id="cb62-10"><a href="#cb62-10"></a>  <span class="fu">ylab</span>(<span class="st">"Height"</span>) <span class="sc">+</span> <span class="co"># y-axis label</span></span>
+<span id="cb62-11"><a href="#cb62-11"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Type of</span><span class="sc">\n</span><span class="st">fertilization"</span>) <span class="sc">+</span> <span class="co"># new legend title</span></span>
+<span id="cb62-12"><a href="#cb62-12"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>), <span class="co"># Increase font sizes</span></span>
+<span id="cb62-13"><a href="#cb62-13"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb62-14"><a href="#cb62-14"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>),</span>
+<span id="cb62-15"><a href="#cb62-15"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
@@ -1739,7 +1742,7 @@ mean of x
 <li>Modern R with the tidyverse: <a href="http://modern-rstats.eu" class="uri">http://modern-rstats.eu</a></li>
 <li>Statistical Inference via Data Science: A ModernDive into R and the tidyverse: <a href="https://moderndive.com/index.html" class="uri">https://moderndive.com/index.html</a></li>
 <li>R for Data Science: <a href="https://r4ds.had.co.nz" class="uri">https://r4ds.had.co.nz</a></li>
-<li>R Manuals::An Introduction to R: &lt;https://rstudio.github.io/r-manuals/ Links to an external site&gt;</li>
+<li>R Manuals::An Introduction to R: <a href="https://RStudio.github.io/r-manuals" class="uri">https://RStudio.github.io/r-manuals</a></li>
 </ul>
 </section>
 <section id="time-series-mean-yield-across-sites-years" class="slide level2">
