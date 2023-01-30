@@ -1,0 +1,1228 @@
+---
+title: "An Introduction to Using R for Horticultural Data Analysis"
+author: "Brittany Barker"
+date: 1/30/23
+format: revealjs
+title-slide-attributes: 
+  data-background-image: "https://github.com/bbarker505/ddrp_v2/blob/master/images/OSU_IPMC_horizontal_2C_O_over_B.png?raw=true"
+  data-background-size: 25%
+  data-background-position: 2% 2%
+---
+
+---
+format: 
+  revealjs:
+    slide-number: c/t
+    width: 1600
+    height: 900
+    css: ["theme/theme.css"]
+    theme: simple
+    echo: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(here) # Start in R project directory
+library(dplyr) # Data wrangling
+library(tidyr) # Data re-structuring
+library(ggplot2) # Plotting model outputs
+library(ggh4x) # For strip text in plots
+library(ggsignif) # Showing significant differences between groups in plots
+library(knitr) # Including graphics
+library(agridat) # Agricultural data
+```
+
+## About me
+
+:::: {.columns}
+
+::: {.column width="40%"}
+```{r, echo = FALSE, out.width = "600px"}
+knitr::include_graphics(here("images", "Intro_photo.jpg"))
+```
+:::
+
+::: {.column width="60%"}
+**Current position**  
+- Research Associate, Oregon IPM Center & Dept. of Hort., OSU  
+<br/>
+**Research interests**  
+- Modeling, ecology, biogeography, conservation, biological invasions, and genetics  
+<br/>
+**Hobbies**  
+- Running, hiking, biking, moving!  
+- Gardening, native habitat restoration  
+- Artistic and creative endeavors  
+<br/>
+  
+:::
+
+::::
+
+##
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r, echo = FALSE, out.width = "1600px"}
+knitr::include_graphics(here("images", "twitter_tidy.png"))
+```
+:::
+
+::: {.column width="50%"}
+
+```{r, echo = FALSE, out.width = "700px"}
+knitr::include_graphics(here("images", "twitter_purrr.png"))
+```
+:::
+
+::::
+
+## Presentation outline
+
+- Introduction to R and Rstudio  
+- Introduction to the Tidyverse
+- Examples: data visualization and analysis    
+  1) Environmental influences on yield (Barley) 
+  2) Germination at different salt concentrations (Alfalfa)
+  3) Inbreeding vs. plant height (Maize) 
+
+## What is R?
+
+- First implemented beginning in early 1990s (based on S language)  
+- First designed for statistics but can now do much more  
+
+```{r, echo = FALSE, out.width= "1000px", fig.align="left", fig.cap = "Source: blog.internshala.com"}
+knitr::include_graphics(here("images", "What-is-R.jpg"))
+```
+
+##   
+
+```{r, echo = FALSE}
+knitr::include_graphics(here("images", "top_languages_2019.jpeg"))
+```
+
+##
+
+```{r, echo = FALSE, out.width = "800px", fig.align="left", fig.cap = "Source: www.icertglobal.com"}
+knitr::include_graphics(here("images", "0Advantages-of-R-Programming.jpg"))
+```
+
+## Limitations of R
+
+- Steep learning curve, but `Rstudio` can help overcome this limitation  
+- Hungry for physical memory: stores all data in physical memory  
+- Slower execution: may not be as fast as MATLAB and Python  
+
+```{r, echo = FALSE, fig.align="left"}
+knitr::include_graphics(here("images", "limitations.png"))
+```
+
+## 
+
+Even after years of experience with R, I have days where I....
+
+```{r, echo = FALSE, out.width = "800px"}
+knitr::include_graphics(here("images", "bang-head-rough-week.gif"))
+```
+
+## RStudio (now Posit)
+
+- Re-branded as Posit (more Python friendly)
+- Free and open source IDE (integrated development environment)  
+- Many convenient features and tools that make it easier to
+  - write and troubleshoot code  
+  - interact with objects in the R environment  
+  - access files  
+  - simultaneously view graphs, data tables, code, and outputs  
+
+```{r, echo = FALSE}
+knitr::include_graphics(here("images", "R_Rstudio.png"))
+```
+
+## Analogy of difference between R and RStudio
+<br/>
+```{r, echo = FALSE, fig.cap = "Source: moderndive.com"}
+knitr::include_graphics(here("images", "R_vRStudio.png"))
+```
+
+## RStudio screenshot
+
+```{r, echo = FALSE, fig.align = "left", fig.cap = "Source: wikipedia.org"}
+knitr::include_graphics(here("images", "RStudio_IDE_screenshot.png"))
+```
+
+## Presentation outline
+
+- Introduction to R and RStudio 
+- Introduction to the Tidyverse *
+
+## Tidyverse
+
+- Collection of R packages designed for data science  
+- Data analysis pipeline to clean, process, model, and visualize data  
+- Write simpler, more readable code    
+
+```{r, echo = FALSE, out.width = "1000px", fig.align="left", fig.cap = "Source: education.rstudio.com"}
+knitr::include_graphics(here("images", "tidyverse_packages_purpose.png"))
+```
+
+## Essential packages: `dplyr` and `tidyr`
+
+As a scientist, you spend a huge amount of time preparing, organizing, formatting, and cleaning data 
+
+- `dplyr` is for data cleaning and manipulation
+- `tidyr` is for converting between different data formats  
+
+```{r, echo = FALSE, out.width = "800px"}
+knitr::include_graphics(here("images", "dplyr_tidyr.png"))
+```
+
+## The pipe operator `%>%`
+
+- The Tidyverse pipe operator `%>%` performs a sequences of actions  
+- Imagining the data stream as a flow of water in pipes
+
+```{r, echo = FALSE, out.width = "1000px", fig.cap = "Source: static-bcrf.biochem.wisc.edu"}
+knitr::include_graphics(here("images", "pipe-data-result-flow.png"))
+```
+
+## The pipe operator `%>%`
+
+- Stream of data can be modified by each successive function (piped) 
+- "Verbs" in `dplyr` are `arrange()`, `mutate()`, `select()`, `filter()`, and `summarize()`
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r, echo = FALSE, out.width = "1800px", fig.cap="center-aligned", fig.cap = "Source: sharpsightlabs.com"}
+knitr::include_graphics(here("images", "dplyr-pipe-syntax_simple.png"))
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r, echo = FALSE, out.width = "800px"}
+knitr::include_graphics(here("images", "multi-line-dplyr-pipe_example.png"))
+```
+:::
+
+::::
+
+## Base R vs. Tidyverse step structure
+
+Some fake data
+```{r}
+df <- data.frame(w = c(1:4), x = c(5:8), y = c(9:12))
+```
+
+## Base R vs. Tidyverse step structure
+
+Some fake data
+```{r}
+df <- data.frame(w = c(1:4), x = c(5:8), y = c(9:12))
+```
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**Base R step structure**
+
+Operations result in an object (e.g., a data frame) being modified multiple times
+
+```{r}
+# Base R step structure
+df_modified <- df[,1:2] # Select cols 1 and 2
+df_modified <- subset(df_modified, x >= 3) # Subset x values >= 3
+df_modified$z <- rowSums(df_modified) # Add cols x and y
+df_modified
+```
+:::
+
+::: {.column width="50%"}
+
+:::
+
+::::
+
+## Base R vs. Tidyverse step structure
+
+Some fake data
+```{r}
+df <- data.frame(w = c(1:4), x = c(5:8), y = c(9:12))
+```
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**Base R step structure**
+
+Operations result in an object (e.g., a data frame) being modified multiple times
+
+```{r}
+# Base R step structure
+df_modified <- df[,1:2] # Select cols 1 and 2
+df_modified <- subset(df_modified, x >= 3) # Subset x values >= 3
+df_modified$z <- rowSums(df_modified) # Add cols x and y
+df_modified
+```
+:::
+
+::: {.column width="50%"}
+
+**Tidyverse step structure**
+
+Operations are done in a pipeline to a single object
+
+```{r}
+df_modified <- df %>%
+  select(w, x) %>% # Select by column name
+  filter(x >= 3) %>% # Subset x values >= 3
+  rowwise() %>% # Row-wise operations
+  mutate(z = sum(c(w, x))) # Sum rows
+df_modified
+```
+:::
+
+::::
+
+## `ggplot2`: another essential Tidyverse package
+
+- Uses layered approach to create graphics (The Grammar of Graphics) 
+- You provide the data, tell `ggplot2` how to map variables to aesthetics, what graphical elements to use, and it takes care of the details
+
+```{r, echo = FALSE, out.width = "800px", fig.cap = "Source: R for the rest of us"}
+knitr::include_graphics(here("images", "grammar-of-graphics.png"))
+```
+
+## Base R plots vs. Tidyverse (`ggplot2`) plots
+
+Plots made with base R functions
+
+```{r, echo = FALSE, fig.align="left", fig.cap = "Source: sharpsightlabs.com"}
+include_graphics(here("images", "Base_R_plots.png"))
+```
+
+## Base R plots vs. Tidyverse (`ggplot2`) plots
+
+Plots made with `ggplot2`
+
+```{r, echo = FALSE, out.width = "800px",  fig.align="left", fig.cap = "Source: www.icertglobal.com"}
+knitr::include_graphics(here("images", "ggplot_plots.png"))
+```
+
+## Presentation outline
+
+- Introduction to R and RStudio 
+- Introduction to the Tidyverse  
+- Examples: data visualization and analysis 
+  1) Environmental influences on yield (Barley) *
+
+## R packages
+
+These packages must be installed prior to running code for the examples
+
+```{r, eval = FALSE}
+library(agridat) # Agricultural data
+library(here) # Start in R project directory
+library(dplyr) # Data wrangling
+library(tidyr) # Data re-structuring
+library(ggplot2) # Plotting model outputs
+library(ggh4x) # For strip text in plots
+library(ggsignif) # Showing significant differences between groups in plots
+```
+
+## Barley: Environmental influences on yield 
+
+Multi-environment trial of barley in Minnesota at 6 sites from 1927-1936
+
+- Available in the `agridat` R package 
+- Questions we'll address:
+  (1) Which sites have the lowest and highest barley yields?
+  (2) How does the environment influence yield?
+
+```{r, fig.align = "left", echo = FALSE}
+knitr::include_graphics(here("images", "alfalfa_hay_1915.jpg"))
+```
+
+## Barley: yield data
+
+- Access datasets from `agridat`
+- Give data a shorter name
+
+```{r}
+# Get barley yield data
+dat_bar <- agridat::minnesota.barley.yield 
+```
+
+## Barley: yield data
+
+- View the first several rows of data using `head()`
+
+```{r}
+# Peek at first several rows
+head(dat_bar)
+```
+
+## Barley: yield data
+
+- View the first several rows of data using `head()`
+
+```{r}
+# Peek at first several rows
+head(dat_bar)
+```
+
+- View the last several rows of data using `tail()`
+
+```{r}
+# Peek at last several rows
+tail(dat_bar)
+```
+
+## Barley: yield data
+
+```{r}
+# Display the data structure
+str(dat_bar)
+```
+
+- Display the data structure using `str()`
+  - Yield (bushels/acre) is numeric
+  - Genotype (variety) is factor
+  - Year is integer
+  - Site is factor
+  
+## Mean barley yield across sites
+
+```{r, `code-line-numbers`="1-3"}
+# Calculate mean yield by site
+mean_yield_sites <- dat_bar %>%
+  group_by(site) %>%
+  summarize(mean = mean(yield))
+```
+
+- Calculate mean yield across the 6 sites
+  - Group data by site using `group_by()`
+
+## Mean barley yield across sites
+
+```{r}
+# Calculate mean yield by site
+mean_yield_sites <- dat_bar %>%
+  group_by(site) %>%
+  summarize(mean = mean(yield))
+```
+
+- Calculate mean yield across the 6 sites
+  - Group data by site using `group_by()`
+  - Use `summarize()` to calculate mean
+
+## Mean barley yield across sites
+
+- Show the results
+
+```{r, `code-line-numbers`="1-3"}
+# Show results
+mean_yield_sites
+```
+
+## Bar plot: mean yield across sites
+
+```{r}
+# Create a bar plot
+plot_yield <- ggplot(data = mean_yield_sites, aes(x = site, y = mean)) +
+  geom_col()
+```
+
+- Visualize mean yield results using a bar plot 
+  - Plot using the `ggplot()` function
+  - The `+` operator adds layers
+  - Aesthetics (x, y, etc.) defined with `aes()`  
+  - Use `geom_col()` if there's only 1 row of data per item  
+
+
+## Bar plot: mean yield across sites
+
+This plot doesn't look that great...
+
+```{r, echo = FALSE}
+plot_yield
+```
+
+## Add layers to improve the bar plot
+
+```{r, `code-line-numbers`="1-3"}
+# Make a prettier ggplot
+plot_yield <- plot_yield +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 50)) + # Force y-axis to start at 0 and end at 50
+  theme_bw() + # Black and white theme
+  xlab("Site") + # x-axis label
+  ylab("Mean yield") + # y-axis label
+  theme(axis.text = element_text(size = 14), # Increase font sizes
+        axis.title = element_text(size = 18))
+```
+
+- Force the y-axis to start 0
+
+## Add layers to improve the bar plot
+
+```{r, `code-line-numbers`="1-4"}
+# Make a prettier ggplot
+plot_yield <- plot_yield +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 50)) + # Force y-axis to start at 0 and end at 50
+  theme_bw() + # Black and white theme
+  xlab("Site") + # x-axis label
+  ylab("Mean yield") + # y-axis label
+  theme(axis.text = element_text(size = 14), # Increase font sizes
+        axis.title = element_text(size = 18))
+```
+
+- Force the y-axis to start 0
+- Use black and white theme
+
+## Add layers to improve the bar plot
+
+```{r, `code-line-numbers`="1-6"}
+# Make a prettier ggplot
+plot_yield <- plot_yield +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 50)) + # Force y-axis to start at 0 and end at 50
+  theme_bw() + # Black and white theme
+  xlab("Site") + # x-axis label
+  ylab("Mean yield") + # y-axis label
+  theme(axis.text = element_text(size = 14), # Increase font sizes
+        axis.title = element_text(size = 18))
+```
+
+- Force the y-axis to start 0
+- Use black and white theme
+- Add custom labels 
+
+## Add layers to improve the bar plot
+
+```{r}
+# Make a prettier ggplot
+plot_yield <- plot_yield +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 50)) + # Force y-axis to start at 0 and end at 50
+  theme_bw() + # Black and white theme
+  xlab("Site") + # x-axis label
+  ylab("Mean yield") + # y-axis label
+  theme(axis.text = element_text(size = 14), # Increase font sizes
+        axis.title = element_text(size = 18))
+```
+
+- Force the y-axis to start 0
+- Use black and white theme
+- Add custom labels
+- Increase font sizes in axes and legend
+
+## Bar plot: mean yield across sites
+
+This plot is better
+
+```{r, echo = FALSE}
+plot_yield
+```
+
+##  Barley yield: environmental covariates
+
+- Question 2: How does the environment influence yield?
+- Access environmental (weather) dataset from `agridat`
+- Sort by `site` column using `arrange()`
+
+```{r}
+# Get weather data and sort by site
+dat_wea <- agridat::minnesota.barley.weather %>%
+  arrange(site)
+```
+
+##  Barley yield: environmental covariates
+
+```{r}
+# Peek at weather data
+head(dat_wea)
+```
+
+- View the first several rows using `head()`
+  - precip: precipitation
+  - max: max temp
+  - min: min temp
+  - cdd: cooling degree-days (unit of physiological time)
+
+## Environmental influences on barley yield
+
+**Four steps**
+
+1) Calculate mean yield across sites and years
+2) Calculate total degree-day accumulation and precipitation across sites and years
+3) Join and reformat results of the two data sets (i.e., yield + environment)
+4) Plot yield vs. environmental covariates
+
+## Step 1: mean yield across sites and years
+
+```{r}
+# Average yield per site and year
+mean_yield_sitesYrs <- dat_bar %>%
+  group_by(site, year) %>%
+  summarize(mean_yield = mean(yield))
+```
+
+- Group yield data by site using (`group_by`) 
+- Calculate mean yield using `summarize()`
+
+## Step 1: mean yield across sites and years
+
+```{r}
+# Average yield per site and year
+mean_yield_sitesYrs <- dat_bar %>%
+  group_by(site, year) %>%
+  summarize(mean_yield = mean(yield))
+
+# Notice we have summaries for sites AND years
+head(mean_yield_sitesYrs)
+```
+ 
+ - Peek at the results
+ 
+## Step 2: Summarize environmental data
+
+```{r, `code-line-numbers`="1-4"}
+# Calculate the sum of degree-days and precip at each site and year
+# All functions in the pipeline are in `dplyr`
+sum_wea_sitesYrs <- dat_wea %>%
+  filter(mo >= 4 & mo <= 8) %>%
+  group_by(site, year) %>%
+  summarize(across(c("cdd", "precip"), ~ sum(.x, na.rm = TRUE)))
+```
+
+- Calculate total degree-day accumulation and precipitation across sites and years  
+  - Use `filter()` to retain data only for summer months (Apr-Aug)
+
+## Step 2: Summarize environmental data
+
+```{r, `code-line-numbers`="1-5"}
+# Calculate the sum of degree-days and precip at each site and year
+# All functions in the pipeline are in `dplyr`
+sum_wea_sitesYrs <- dat_wea %>%
+  filter(mo >= 4 & mo <= 8) %>%
+  group_by(site, year) %>%
+  summarize(across(c("cdd", "precip"), ~ sum(.x, na.rm = TRUE)))
+```
+
+- Calculate total degree-day accumulation and precipitation across sites and years  
+  - Use `filter()` to retain data only for summer months (Apr-Aug)
+  - Group data by site and year using `group_by()`  
+
+## Step 2: Summarize environmental data
+
+```{r, `code-line-numbers`="1-6"}
+# Calculate the sum of degree-days and precip at each site and year
+# All functions in the pipeline are in `dplyr`
+sum_wea_sitesYrs <- dat_wea %>%
+  filter(mo >= 4 & mo <= 8) %>%
+  group_by(site, year) %>%
+  summarize(across(c("cdd", "precip"), ~ sum(.x, na.rm = TRUE)))
+```
+
+- Calculate total degree-day accumulation and precipitation across sites and years 
+  - Use `filter()` to retain data only for summer months (Apr-Aug)
+  - Group data by site and year using `group_by()`
+  - Sum degree-days and precip for each year using `summarize()` and `across()`  
+
+## Step 2: Summarize environmental data
+
+```{r}
+# Peek at results
+head(sum_wea_sitesYrs)
+```
+
+- Peek at the results
+
+## Step 3: Join and reformat results
+
+```{r, `code-line-numbers`="1-3"}
+# Join summarized data
+all_data_sitesYrs <- mean_yield_sitesYrs %>%
+  left_join(sum_wea_sitesYrs, by = c("site", "year")) %>%
+  pivot_longer(cols = c( "cdd", "precip"), names_to = "Variable")
+```
+
+- Join summarized yield and environment datasets using `left_join()` 
+
+## Step 3: Join and reformat results
+
+```{r}
+# Join summarized data
+all_data_sitesYrs <- mean_yield_sitesYrs %>%
+  left_join(sum_wea_sitesYrs, by = c("site", "year")) %>%
+  pivot_longer(cols = c( "cdd", "precip"), names_to = "Variable")
+```
+
+- Join summarized yield and environment datasets `left_join()` 
+- Change to structure to long format using `pivot_longer()`  
+
+## Step 3: Join and reformat results
+
+```{r}
+# Peek at results
+head(all_data_sitesYrs)
+```
+
+- Peek at the results
+
+## Step 4: Plot yield vs. environmental covariates
+
+```{r, `code-line-numbers`="1-3"}
+# Create a scatter plot with a regression line
+plot_barVwea <- ggplot(data = all_data_sitesYrs, aes(x = value, y = mean_yield, color = Variable)) +
+  geom_point() +
+  geom_smooth(method='lm', se = FALSE) +
+  ggh4x::facet_nested_wrap(~site + Variable, nrow = 3, scales = "free_x") +
+  theme_bw() + # Black and white theme
+  xlab("Variable") + # x-axis label
+  ylab("Mean yield") + # y-axis label
+  theme(axis.text = element_text(size = 14), # Increase font sizes
+        axis.title = element_text(size = 18),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14),
+        strip.text = element_text(size = 14))
+```
+
+- Create a scatter plot using `geom_point()`
+
+## Step 4: Plot yield vs. environmental covariates
+
+```{r, `code-line-numbers`="1-4"}
+# Create a scatter plot with a regression line
+plot_barVwea <- ggplot(data = all_data_sitesYrs, aes(x = value, y = mean_yield, color = Variable)) +
+  geom_point() +
+  geom_smooth(method='lm', se = FALSE) +
+  ggh4x::facet_nested_wrap(~site + Variable, nrow = 3, scales = "free_x") +
+  theme_bw() + # Black and white theme
+  xlab("Variable") + # x-axis label
+  ylab("Mean yield") + # y-axis label
+  theme(axis.text = element_text(size = 14), # Increase font sizes
+        axis.title = element_text(size = 18),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14),
+        strip.text = element_text(size = 14))
+```
+
+- Create a scatter plot using `geom_point()`
+- Add a linear regression line using `geom_smooth()` with `lm` method
+
+## Step 4: Plot yield vs. environmental covariates
+
+```{r, `code-line-numbers`="1-5"}
+# Create a scatter plot with a regression line
+plot_barVwea <- ggplot(data = all_data_sitesYrs, aes(x = value, y = mean_yield, color = Variable)) +
+  geom_point() +
+  geom_smooth(method='lm', se = FALSE) +
+  ggh4x::facet_nested_wrap(~site + Variable, nrow = 3, scales = "free_x") +
+  theme_bw() + # Black and white theme
+  xlab("Variable") + # x-axis label
+  ylab("Mean yield") + # y-axis label
+  theme(axis.text = element_text(size = 14), # Increase font sizes
+        axis.title = element_text(size = 18),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14),
+        strip.text = element_text(size = 14))
+```
+
+- Create a scatter plot using `geom_point()`
+- Add a linear regression line using `geom_smooth()` with `lm` method
+- Create plots for each site and covariate using `facet_nested_wrap()`
+
+## Step 4: Plot yield vs. environmental covariates
+
+```{r}
+# Create a scatter plot with a regression line
+plot_barVwea <- ggplot(data = all_data_sitesYrs, aes(x = value, y = mean_yield, color = Variable)) +
+  geom_point() +
+  geom_smooth(method='lm', se = FALSE) +
+  ggh4x::facet_nested_wrap(~site + Variable, nrow = 3, scales = "free_x") +
+  theme_bw() + # Black and white theme
+  xlab("Variable") + # x-axis label
+  ylab("Mean yield") + # y-axis label
+  theme(axis.text = element_text(size = 14), # Increase font sizes
+        axis.title = element_text(size = 18),
+        legend.text = element_text(size = 16),
+        legend.title = element_text(size = 16),
+        strip.text = element_text(size = 14))
+```
+
+- Create a scatter plot using `geom_point()`
+- Add a linear regression line using `geom_smooth()` with `lm` method
+- Create plots for each site and covariate using `facet_nested_wrap`
+- Make plot prettier by adding more layers (font sizes, etc.)
+
+## Step 4: Plot yield vs. environmental covariates
+
+Barley yield is higher when conditions are colder (less degree-day accumulation) and wetter  
+
+```{r, fig.width = 14, fig.height = 10, echo = FALSE}
+plot_barVwea
+```
+  
+## Presentation outline
+
+- Introduction to R and Rstudio 
+- Introduction to the Tidyverse  
+- Examples: data visualization and analysis    
+  1) Environmental influences on yield (Barley) 
+  2) Germination at different salt concentrations (Alfalfa) *
+
+## Dataset 2: Germination of alfalfa seeds
+
+Germination of alfalfa seeds at various salt concentrations
+
+- Available in the `agridat` R package  
+- Study goal (Carlson et al. 1983): select alfalfa cultivars with ability to grow in saline soils
+
+```{r, echo = FALSE, fig.align = "left", fig.cap="Credit: Donald R. Miller"}
+knitr::include_graphics(here("images", "salt_tolerant_alfalfa.jpg"))
+```
+
+## Prepare data for plotting
+
+- Germination is expressed as a proportion of the no-salt control to account for differences in germination among the cultivars
+- `germ` column needs to be divided by 100 for response curves
+- Column format for salt concentration (`nacl`) must be factor (category) 
+
+```{r}
+# Create new columns
+dat_alf <- carlson.germination %>%
+  mutate(germ_frac = germ/100,
+         nacl_factor = as.factor(nacl))
+
+# Peek at data
+head(dat_alf)
+```
+
+## Box plots: germination vs. salt concentration
+
+- How do germination rates vary with salt concentrations across all genotypes?  
+- Make box plot using `geom_boxplot()`
+
+```{r}
+plot_box_alf <- ggplot(dat_alf, aes(x = nacl_factor, y = germ, fill = nacl_factor)) +
+  geom_boxplot() +
+  theme_bw() +
+  xlab("Salt concentration (%)") + # x-axis label
+  ylab("Germination (%)") + # y-axis label
+  labs(fill = "Salt\nconcentration (%)") + # new legend title
+  theme(axis.text = element_text(size = 14), # Increase font sizes
+        axis.title = element_text(size = 18),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14))
+```
+
+
+## Box plots: germination vs. salt concentration
+
+```{r, echo = FALSE}
+plot_box_alf
+```
+
+## Generalized linear model
+
+- Build linear response between response (germination) and predictors (cultivar and salt concentration)
+
+```{r}
+# Generalized linear model 
+# Main effects 
+glm_results <- glm(germ_frac ~ 0 + gen*nacl, data = dat_alf, family = quasibinomial)
+summary(glm_results)
+```
+
+## Response curves for each genotype
+
+```{r, `code-line-numbers`="1-3"}
+# Response curve plot
+plot_resp_alf <- ggplot(data = dat_alf, aes(x = nacl, y = germ_frac)) + 
+  geom_point() +          # make a scatter plot
+  geom_smooth(method = "glm", se = FALSE, method.args = list(family=quasibinomial(link="probit"))) +
+  facet_wrap(~gen, nrow = 5) +
+  xlab("Salt concentration (%)") +   # label x-axis
+  ylab("Germination (%)") +    # label y-axis
+  theme_bw() +
+  scale_x_continuous(breaks = c(0, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2)) +
+  theme(axis.text = element_text(size = 10), # Increase font sizes
+      axis.title = element_text(size = 14),
+      legend.text = element_text(size = 10),
+      legend.title = element_text(size = 10),
+      strip.text = element_text(size = 12))
+```
+
+- `geom_point` creates a scatter plot
+
+## Response curves for each genotype
+
+```{r, `code-line-numbers`="1-4"}
+# Response curve plot
+plot_resp_alf <- ggplot(data = dat_alf, aes(x = nacl, y = germ_frac)) + 
+  geom_point() +          # make a scatter plot
+  geom_smooth(method = "glm", se = FALSE, method.args = list(family=quasibinomial(link="probit"))) +
+  facet_wrap(~gen, nrow = 5) +
+  xlab("Salt concentration (%)") +   # label x-axis
+  ylab("Germination (%)") +    # label y-axis
+  theme_bw() +
+  scale_x_continuous(breaks = c(0, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2)) +
+  theme(axis.text = element_text(size = 10), # Increase font sizes
+      axis.title = element_text(size = 14),
+      legend.text = element_text(size = 10),
+      legend.title = element_text(size = 10),
+      strip.text = element_text(size = 12))
+```
+
+- `geom_point` creates a scatter plot
+- `geom_smooth` adds a fitted line using the `glm()`method 
+
+
+## Response curves for each genotype
+
+```{r, `code-line-numbers`="1-5"}
+# Response curve plot
+plot_resp_alf <- ggplot(data = dat_alf, aes(x = nacl, y = germ_frac)) + 
+  geom_point() +          # make a scatter plot
+  geom_smooth(method = "glm", se = FALSE, method.args = list(family=quasibinomial(link="probit"))) +
+  facet_wrap(~gen, nrow = 5) +
+  xlab("Salt concentration (%)") +   # label x-axis
+  ylab("Germination (%)") +    # label y-axis
+  theme_bw() +
+  scale_x_continuous(breaks = c(0, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2)) +
+  theme(axis.text = element_text(size = 10), # Increase font sizes
+      axis.title = element_text(size = 14),
+      legend.text = element_text(size = 10),
+      legend.title = element_text(size = 10),
+      strip.text = element_text(size = 12))
+```
+
+- `geom_point` creates a scatter plot
+- `geom_smooth` adds a fitted line using the `glm()`method 
+- Plot results for each cultivar separately using `facet_wrap()`
+
+## Response curves for each genotype
+
+```{r}
+# Response curve plot
+plot_resp_alf <- ggplot(data = dat_alf, aes(x = nacl, y = germ_frac)) + 
+  geom_point() +          # make a scatter plot
+  geom_smooth(method = "glm", se = FALSE, method.args = list(family=quasibinomial(link="probit"))) +
+  facet_wrap(~gen, nrow = 5) +
+  xlab("Salt concentration (%)") +   # label x-axis
+  ylab("Fraction germinated") +    # label y-axis
+  theme_bw() +
+  scale_x_continuous(breaks = c(0, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2)) +
+  theme(axis.text = element_text(size = 10), # Increase font sizes
+      axis.title = element_text(size = 14),
+      legend.text = element_text(size = 10),
+      legend.title = element_text(size = 10),
+      strip.text = element_text(size = 12))
+```
+
+- `geom_point` creates a scatter plot
+- `geom_smooth` adds a fitted line using the `glm()`method 
+- Plot results for each cultivar separately using `facet_wrap()`
+- Make plot prettier by adding custom labels, custom axis breaks, etc.
+
+## Response curves for each genotype
+
+High (Vernal cultivar) vs. low (Olympic, Vangard) salt tolerance 
+
+```{r, fig.height = 8, fig.width = 12, echo = FALSE}
+plot_resp_alf
+```
+
+## Presentation outline
+
+- Introduction to R and Rstudio 
+- Introduction to the Tidyverse  
+- Examples: data visualization and analysis    
+  1) Environmental influences on yield (Barley) 
+  2) Germination at different salt concentrations (Alfalfa)
+  3) Inbreeding vs. plant height (Maize) *
+
+## Dataset 3: Inbreeding and plant heights
+
+- Darwin experimented on corn seeds of self-fertilized and cross-fertilized corn plants  
+- He hypothesized that cross-bred plants would be superior (taller) to self-fertilized plants  
+- R.A. Fisher analyzed Darwin's data with t-tests  
+- Data available in the `agridat` R package  
+
+```{r, echo = FALSE, out.width = "300px"}
+knitr::include_graphics(here("images", "Charles_Darwin_01.jpg"))
+```
+
+## One sided t-test: maize plant heights
+
+```{r, `code-line-numbers`="1-7"}
+# Get data
+dat_corn <- agridat::darwin.maize
+
+# One-sample t-test using "t.test"
+# Calculate differences between cross and self plant heights
+dat_corn2 <- dat_corn %>%
+  pivot_wider(names_from = "type", values_from = "height") %>%
+  mutate(diff = cross - self)
+```
+
+- Re-format data to "wide" format 
+
+## One sided t-test: maize plant heights
+
+```{r}
+# Get data
+dat_corn <- agridat::darwin.maize
+
+# One-sample t-test using "t.test"
+# Calculate differences between cross and self plant heights
+dat_corn2 <- dat_corn %>%
+  pivot_wider(names_from = "type", values_from = "height") %>%
+  mutate(diff = cross - self)
+```
+
+- Re-format data to "wide" format 
+- Create a column of differences in plant height (cross - self)
+
+## One sample t-test: maize plant heights
+
+- Conduct a one-sample t-test using `t.test()`
+
+```{r}
+# One sample t-test
+# Test if population mean is different from 0
+# H0: no difference
+t.test(dat_corn2$diff, mu = 0) 
+```
+
+## Box plots and t-test: maize plant heights
+
+- `ggsignif()` can show whether groups are significantly different  
+- We specify "greater" in the `altnerative` argument to test the hypothesis that crossed plants are taller
+
+```{r, `code-line-numbers`="1-6"}
+# Create a box plot showing t-test results
+plot_corn <- ggplot(dat_corn, aes(x = type, y = height, fill = type)) +
+  geom_boxplot() + # box plot
+  ggsignif::geom_signif(comparisons = list(c("cross", "self")), 
+            map_signif_level = TRUE, # add significance values
+            alternative = "greater") + # Crossed plants higher
+  theme_bw() +
+  xlab("Type of fertilization") + # x-axis label
+  ylab("Height") + # y-axis label
+  labs(fill = "Type of\nfertilization") + # new legend title
+  theme(axis.text = element_text(size = 16), # Increase font sizes
+        axis.title = element_text(size = 18),
+        legend.text = element_text(size = 16),
+        legend.title = element_text(size = 16))
+```
+
+## Box plots and t-test: maize plant heights
+
+Make plot prettier and voila
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r, fig.width = 8, fig.height = 10}
+# Create a box plot showing t-test results
+plot_corn <- ggplot(dat_corn, aes(x = type, y = height, fill = type)) +
+  geom_boxplot() + # box plot
+  ggsignif::geom_signif(comparisons = list(c("cross", "self")), 
+            map_signif_level = TRUE) + # add significance values
+  theme_bw() +
+  xlab("Type of fertilization") + # x-axis label
+  ylab("Height") + # y-axis label
+  labs(fill = "Type of\nfertilization") + # new legend title
+  theme(axis.text = element_text(size = 20), # Increase font sizes
+        axis.title = element_text(size = 22),
+        legend.text = element_text(size = 20),
+        legend.title = element_text(size = 22))
+
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r, fig.width = 10, fig.height = 8, echo = FALSE}
+plot_corn
+```
+
+:::
+
+::::
+
+## Summary
+
+- R and RStudio (Posit) are great tools for analyzing and visualizing data
+- RStudio makes it a LOT easier to learn and use R, e.g.,
+  - run code line by line if needed
+  - troubleshoot issues 
+  - visualize plots before saving
+  - looking at data (similar to looking at an Excel spreadsheet)
+  
+```{r, echo = FALSE, fig.align = "left", fig.cap = "Source: moderndive.com"}
+knitr::include_graphics(here("images", "R_vRStudio.png"))
+```
+
+## Summary
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+- There's many ways to do things in R, but I prefer the Tidyverse approach
+  - more readable code
+  - offers order and consistency
+  - functions to support entire end-to-end workflow
+  - beautiful graphics
+
+:::
+
+::: {.column width="60%"}
+
+```{r, echo = FALSE, fig.align = "left", out.width="600px", fig.cap = "Source: reddit.com/r/Rlanguage"}
+knitr::include_graphics(here("images", "repro_reports.jpg"))
+```
+
+:::
+
+::::
+
+## Closing statements
+
+- Don't be afraid to learn R!
+- I've used R for ~12 years and I'm still learning new skills 
+
+## I learned a new skill doing this presentation!
+
+- `revealjs` is an open source HTML presentation framework   
+- User guide: <https://Posit.org/docs/presentations/revealjs/>
+
+```{r, echo = FALSE}
+knitr::include_graphics(here("images", "revealjs.png"))
+```
+
+## This presentation in RStudio
+
+```{r, echo = FALSE, fig.align = "left"}
+knitr::include_graphics(here("images", "this_presentation.png"))
+```
+
+## Closing statements
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- It's normal to want to rip your hair out sometimes
+- Connect with your local R community
+- Tons of freely available online books and tutorials 
+- I can send you a list of resources that I compiled if you reach out
+
+:::
+
+::: {.column width="50%"}
+
+```{r, echo = FALSE, fig.align = "left", out.width = "600px"}
+knitr::include_graphics(here("images", "programmer_meme.jpg"))
+```
+
+:::
+
+::::
+
+## Thank you!
+
+- E-mail: `brittany.barker@oregonstate.edu`
+- Website: [brittanysbarker.org](http://brittanysbarker.org)  
+- This presentation (includes code) is available at <https://github.com/bbarker505/ASHS_R_presentation_2023/>
+
+```{r, echo = FALSE, fig.align = "left"}
+knitr::include_graphics(here("images", "ferns.jpg"))
+```
+
+## Some potentially helpful starting points
+
+- R Cookbook: <https://rc2e.com>
+- Modern R with the tidyverse: <http://modern-rstats.eu>
+- Statistical Inference via Data Science: A ModernDive into R and the tidyverse: <https://moderndive.com/index.html>
+- R for Data Science: <https://r4ds.had.co.nz> 
+- R Manuals::An Introduction to R: <https://rstudio.github.io/r-manuals/ Links to an external site>
+
+## Time series: Mean yield across sites + years
+
+Step 2: Create a time series plot using `ggplot2`
+
+- Line plot created using `geom_line()`  
+- `facet_wrap` combines multiple plots (by site)  
+
+```{r, eval = FALSE}
+# Create a plot that shows time series at each site
+ggplot(mean_yield_sitesYrs, aes(x = year, y = mean_yield)) +
+  geom_line() +
+  theme_bw() + 
+  facet_wrap(~site) + # Produce a plot for each site
+  xlab("Year") + # x-axis label
+  ylab("Mean yield") + # y-axis label
+  theme(axis.text = element_text(size = 14), # Increase font sizes
+        axis.title = element_text(size = 18),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14))
+
+```
+
+## Environment plus yield across sites + years
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+Create a plot showing time series of precipitation and mean yield
+
+**Time series plot for all sites**
+```{r}
+# Subset data (only need mean yield and precip data)
+all_data_sitesYrs2 <- filter(all_data_sitesYrs, Variable %in% c("mean_yield", "precip"))
+
+# Create a time series plot for all sites
+plot_wea <- ggplot(all_data_sitesYrs2, aes(x = year, y = value, color = Variable)) +
+  geom_line() +
+  theme_bw() + # Black and white plot theme
+  facet_wrap(~site)
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE}
+plot_wea
+```
+
+:::
+
+::::
+
+## Time series: Mean yield across sites + years
+
+```{r, echo = TRUE}
+# Create a plot that shows time series at each site
+ggplot(mean_yield_sitesYrs, aes(x = year, y = mean_yield)) +
+  geom_line() +
+  theme_bw() + 
+  facet_wrap(~site) +
+  xlab("Year") + # x-axis label
+  ylab("Mean yield") + # y-axis label
+  theme(axis.text = element_text(size = 14), # Increase font sizes
+        axis.title = element_text(size = 18),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14),
+        strip.text = element_text(size = 14))
+
+```
